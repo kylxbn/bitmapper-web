@@ -25,19 +25,26 @@
       </template>
     </q-file>
     <q-btn label="Play" @click="play" color="primary" class="q-ma-sm" />
-    <q-btn label="Stop" @click="pause" color="warning" class="q-ma-sm" />
+    <q-btn label="Stop" @click="pause" color="warning" class="q-ma-sm" /><br><br>
+
+    <q-btn label="Create PNG" color="primary" @click="create" />
+    <q-btn label="Download PNG" v-if="canvas1" color="positive" @click="download" />
   </q-page>
 </template>
 
 <script>
 import { AudioGenerator } from '../libraries/generator.js'
+import { BitmapEncoder } from '../libraries/encoder/encoder.js'
+
+import download from 'downloadjs/download.js'
 
 export default {
   name: 'PageIndex',
   data () {
     return {
       audioFile: null,
-      audioGenerator: new AudioGenerator()
+      audioGenerator: new AudioGenerator(),
+      canvas1: null
     }
   },
   methods: {
@@ -47,6 +54,14 @@ export default {
     },
     pause () {
       this.audioGenerator.stop()
+    },
+    download () {
+      var dataURL = this.canvas1.toDataURL('image/png')
+      download(dataURL, 'image1.png', 'image/png')
+    },
+    create () {
+      var encoder = new BitmapEncoder()
+      this.canvas1 = encoder.encode()
     }
   }
 }

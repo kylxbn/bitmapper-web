@@ -7,29 +7,29 @@ class AudioGenerator {
   async play () {
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
 
-    var reader = new FileReader()
+    const reader = new FileReader()
     reader.onload = (e) => {
-      var audio = document.createElement('audio')
+      const audio = document.createElement('audio')
       audio.src = e.target.result
-      var source = this.audioCtx.createMediaElementSource(audio)
+      const source = this.audioCtx.createMediaElementSource(audio)
 
       // Create a gain node
-      var gainNode = this.audioCtx.createBiquadFilter()
+      const gainNode = this.audioCtx.createBiquadFilter()
       gainNode.type = 'lowpass'
       gainNode.frequency.setValueAtTime(0, 4000)
 
-      var processor = this.audioCtx.createScriptProcessor(8192, 2, 2)
+      const processor = this.audioCtx.createScriptProcessor(8192, 2, 2)
       this.processor = processor
       processor.onaudioprocess = (e) => {
-        var ib = e.inputBuffer
-        var ob = e.outputBuffer
+        const ib = e.inputBuffer
+        const ob = e.outputBuffer
 
-        for (var channel = 0; channel < ob.numberOfChannels; channel++) {
-          var inputData = ib.getChannelData(channel)
-          var outputData = ob.getChannelData(channel)
+        for (let channel = 0; channel < ob.numberOfChannels; channel++) {
+          const inputData = ib.getChannelData(channel)
+          const outputData = ob.getChannelData(channel)
 
           // Loop through the 4096 samples
-          for (var sample = 0; sample < ib.length; sample++) {
+          for (let sample = 0; sample < ib.length; sample++) {
             // make output equal to the same as the input
             outputData[sample] = inputData[sample] * 1.5
 
